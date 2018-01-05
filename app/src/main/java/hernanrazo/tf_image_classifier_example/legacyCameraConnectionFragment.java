@@ -5,8 +5,8 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import java.io.IOException;
 import java.util.List;
 import hernanrazo.tf_image_classifier_example.env.ImageUtils;
-import hernanrazo.tf_image_classifier_example.env.Logger;
 import hernanrazo.tf_image_classifier_example.R;
 
 //TODO: update to the camera2 API???
@@ -25,7 +24,7 @@ import hernanrazo.tf_image_classifier_example.R;
 public class legacyCameraConnectionFragment extends Fragment {
 
     private Camera camera;
-    private static final Logger LOGGER = new Logger();
+    public static final String TAG = "legacyCameraFragment";
     private Camera.PreviewCallback imageListener;
     private Size desiredSize;
     private int layout;
@@ -151,7 +150,7 @@ public class legacyCameraConnectionFragment extends Fragment {
             backgroundThread.join();
             backgroundThread = null;
         } catch (final InterruptedException e) {
-            LOGGER.e(e, "Exception!");
+            Log.e(TAG, "Exception!");
         }
     }
 

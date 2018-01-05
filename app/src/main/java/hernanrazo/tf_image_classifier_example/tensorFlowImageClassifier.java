@@ -25,7 +25,7 @@ public class tensorFlowImageClassifier implements classifier {
     private int inputSize;
     private int imageMean;
     private float imageStd;
-    private Vector<String> labels = new Vector<String>();
+    private Vector<String> labels = new Vector<>();
     private int[] intValues;
     private float[] floatValues;
     private float[] outputs;

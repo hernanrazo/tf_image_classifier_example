@@ -13,27 +13,25 @@ import android.util.TypedValue;
 import android.view.Display;
 import java.util.List;
 import java.util.Vector;
-import hernanrazo.tf_image_classifier_example.overLayView.DrawCallback;
+import hernanrazo.tf_image_classifier_example.overlayView.DrawCallback;
 import hernanrazo.tf_image_classifier_example.env.ImageUtils;
-import hernanrazo.tf_image_classifier_example.env.Logger;
 import hernanrazo.tf_image_classifier_example.env.BorderedText;
 import hernanrazo.tf_image_classifier_example.R;
 
 public class classifierActivity extends cameraActivity implements OnImageAvailableListener {
 
-    private static final Logger LOGGER = new Logger();
     protected static final boolean SAVE_PREVIEW_BITMAP = false;
     private resultsView resultsView;
     private Bitmap rgbFrameBitmap = null;
     private Bitmap croppedBitmap = null;
     private Bitmap cropCopyBitmap = null;
     private long lastProcessingTimeMs;
-    private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 117;
-    private static final float IMAGE_STD = 1;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "output";
-    private static final String MODEL_FILE = "file:///android_asset/retrained_graph.pb";
+    private static final int INPUT_SIZE = 299;
+    private static final int IMAGE_MEAN = 128;
+    private static final float IMAGE_STD = 128;
+    private static final String INPUT_NAME = "Mul";
+    private static final String OUTPUT_NAME = "final_result";
+    private static final String MODEL_FILE = "file:///android_asset/rounded_graph.pb";
     private static final String LABEL_FILE = "file:///android_asset/retrained_labels.txt";
     private static final boolean MAINTAIN_ASPECT = true;
     private static final Size DESIRED_PREVIEW_SIZE = new Size(640, 480);
@@ -77,11 +75,7 @@ public class classifierActivity extends cameraActivity implements OnImageAvailab
         final Display display = getWindowManager().getDefaultDisplay();
         final int screenOrientation = display.getRotation();
 
-        LOGGER.i("Sensor orientation: %d, Screen orientation: %d", rotation, screenOrientation);
-
         sensorOrientation = rotation + screenOrientation;
-
-        LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
         rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Config.ARGB_8888);
         croppedBitmap = Bitmap.createBitmap(INPUT_SIZE, INPUT_SIZE, Config.ARGB_8888);
 
@@ -118,10 +112,9 @@ public class classifierActivity extends cameraActivity implements OnImageAvailab
                         final long startTime = SystemClock.uptimeMillis();
                         final List<classifier.Recognition> results = classifier.recognizeImage(croppedBitmap);
                         lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
-                        LOGGER.i("Detect: %s", results);
                         cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
                         if (resultsView == null) {
-                            resultsView = (resultsView) findViewById(R.id.results);
+                            resultsView = findViewById(R.id.results);
                         }
                         resultsView.setResults(results);
                         requestRender();

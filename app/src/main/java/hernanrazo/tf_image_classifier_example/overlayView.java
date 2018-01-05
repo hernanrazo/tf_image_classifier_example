@@ -7,10 +7,12 @@ import android.view.View;
 import java.util.LinkedList;
 import java.util.List;
 
-public class overLayView extends View {
 
-    private final List<DrawCallback> callbacks = new LinkedList<DrawCallback>();
-    public overLayView(final Context context, final AttributeSet attrs) {
+public class overlayView extends View {
+
+    private final List<DrawCallback> callbacks = new LinkedList<>();
+
+    public overlayView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 

@@ -3,18 +3,20 @@ package hernanrazo.tf_image_classifier_example.env;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
 public class ImageUtils {
 
-    private static final Logger LOGGER = new Logger();
+
 
     static {
         try {
             System.loadLibrary("tensorflow_demo");
         } catch (UnsatisfiedLinkError e) {
-            LOGGER.w("Native library not found, native RGB -> YUV conversion may be unavailable.");
+            Log.w("ImageUtils.java","Native library not found, native RGB -> YUV conversion may be unavailable.");
         }
     }
 
@@ -33,11 +35,11 @@ public class ImageUtils {
     public static void saveBitmap(final Bitmap bitmap, final String filename) {
         final String root =
                 Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "tensorflow";
-        LOGGER.i("Saving %dx%d bitmap to %s.", bitmap.getWidth(), bitmap.getHeight(), root);
+
         final File myDir = new File(root);
 
         if (!myDir.mkdirs()) {
-            LOGGER.i("Make dir failed");
+            Log.i("make dir","Make dir failed");
         }
 
         final String fname = filename;
@@ -51,7 +53,7 @@ public class ImageUtils {
             out.flush();
             out.close();
         } catch (final Exception e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("fileOutputStream", "Exception!");
         }
     }
 
@@ -69,8 +71,7 @@ public class ImageUtils {
                 ImageUtils.convertYUV420SPToARGB8888(input, output, width, height, false);
                 return;
             } catch (UnsatisfiedLinkError e) {
-                LOGGER.w(
-                        "Native YUV420SP -> RGB implementation not found, falling back to Java implementation");
+                Log.w("YUV420SPToARGB8888","Native YUV420SP -> RGB implementation not found, falling back to Java implementation");
                 useNativeConversion = false;
             }
         }
@@ -135,8 +136,7 @@ public class ImageUtils {
                         false);
                 return;
             } catch (UnsatisfiedLinkError e) {
-                LOGGER.w(
-                        "Native YUV420 -> RGB implementation not found, falling back to Java implementation");
+                Log.w("YUV420ToARGB8888","Native YUV420 -> RGB implementation not found, falling back to Java implementation");
                 useNativeConversion = false;
             }
         }
@@ -215,10 +215,8 @@ public class ImageUtils {
         }
 
         if (applyRotation != 0) {
-
             matrix.postTranslate(dstWidth / 2.0f, dstHeight / 2.0f);
         }
-
         return matrix;
     }
 }

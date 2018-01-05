@@ -26,7 +26,9 @@ import android.media.ImageReader.OnImageAvailableListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -42,15 +44,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import hernanrazo.tf_image_classifier_example.env.Logger;
 import hernanrazo.tf_image_classifier_example.R;
 
 public class cameraConnectionFragment extends Fragment {
 
-    private static final Logger LOGGER = new Logger();
     private static final int MINIMUM_PREVIEW_SIZE = 320;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final String FRAGMENT_DIALOG = "dialog";
+    public static final String TAG = "cameraFragment";
     private String cameraId;
     private autoFitTextureView textureView;
     private CameraCaptureSession captureSession;
@@ -78,14 +79,16 @@ public class cameraConnectionFragment extends Fragment {
     private final TextureView.SurfaceTextureListener surfaceTextureListener =
             new TextureView.SurfaceTextureListener() {
                 @Override
-                public void onSurfaceTextureAvailable(
-                        final SurfaceTexture texture, final int width, final int height) {
+                public void onSurfaceTextureAvailable(final SurfaceTexture texture,
+                                                      final int width,
+                                                      final int height) {
                     openCamera(width, height);
                 }
 
                 @Override
-                public void onSurfaceTextureSizeChanged(
-                        final SurfaceTexture texture, final int width, final int height) {
+                public void onSurfaceTextureSizeChanged(final SurfaceTexture texture,
+                                                        final int width,
+                                                        final int height) {
                     configureTransform(width, height);
                 }
 
@@ -104,7 +107,7 @@ public class cameraConnectionFragment extends Fragment {
 
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
                 @Override
-                public void onOpened(final CameraDevice cd) {
+                public void onOpened(@NonNull final CameraDevice cd) {
 
                     cameraOpenCloseLock.release();
                     cameraDevice = cd;
@@ -112,14 +115,14 @@ public class cameraConnectionFragment extends Fragment {
                 }
 
                 @Override
-                public void onDisconnected(final CameraDevice cd) {
+                public void onDisconnected(@NonNull final CameraDevice cd) {
                     cameraOpenCloseLock.release();
                     cd.close();
                     cameraDevice = null;
                 }
 
                 @Override
-                public void onError(final CameraDevice cd, final int error) {
+                public void onError(@NonNull final CameraDevice cd, final int error) {
                     cameraOpenCloseLock.release();
                     cd.close();
                     cameraDevice = null;
@@ -130,11 +133,11 @@ public class cameraConnectionFragment extends Fragment {
                 }
             };
 
-    private cameraConnectionFragment(
-            final ConnectionCallback connectionCallback,
-            final OnImageAvailableListener imageListener,
-            final int layout,
-            final Size inputSize) {
+    private cameraConnectionFragment(final ConnectionCallback connectionCallback,
+                                     final OnImageAvailableListener imageListener,
+                                     final int layout,
+                                     final Size inputSize) {
+
         this.cameraConnectionCallback = connectionCallback;
         this.imageListener = imageListener;
         this.layout = layout;
@@ -159,8 +162,8 @@ public class cameraConnectionFragment extends Fragment {
         final Size desiredSize = new Size(width, height);
 
         boolean exactSizeFound = false;
-        final List<Size> bigEnough = new ArrayList<Size>();
-        final List<Size> tooSmall = new ArrayList<Size>();
+        final List<Size> bigEnough = new ArrayList<>();
+        final List<Size> tooSmall = new ArrayList<>();
         for (final Size option : choices) {
             if (option.equals(desiredSize)) {
                 exactSizeFound = true;
@@ -173,21 +176,21 @@ public class cameraConnectionFragment extends Fragment {
             }
         }
 
-        LOGGER.i("Desired size: " + desiredSize + ", min size: " + minSize + "x" + minSize);
-        LOGGER.i("Valid preview sizes: [" + TextUtils.join(", ", bigEnough) + "]");
-        LOGGER.i("Rejected preview sizes: [" + TextUtils.join(", ", tooSmall) + "]");
+        Log.i("Sizing","Desired size: " + desiredSize + ", min size: " + minSize + "x" + minSize);
+        Log.i("Sizing","Valid preview sizes: [" + TextUtils.join(", ", bigEnough) + "]");
+        Log.i("Sizing","Rejected preview sizes: [" + TextUtils.join(", ", tooSmall) + "]");
 
         if (exactSizeFound) {
-            LOGGER.i("Exact size match found.");
+            Log.i("exactSizeFound" ,"Exact size match found.");
             return desiredSize;
         }
 
         if (bigEnough.size() > 0) {
             final Size chosenSize = Collections.min(bigEnough, new CompareSizesByArea());
-            LOGGER.i("Chosen size: " + chosenSize.getWidth() + "x" + chosenSize.getHeight());
+            Log.i("bigEnough.size()","Chosen size: " + chosenSize.getWidth() + "x" + chosenSize.getHeight());
             return chosenSize;
         } else {
-            LOGGER.e("Couldn't find any suitable preview size");
+            Log.e("bigEnough.size()","Couldn't find any suitable preview size");
             return choices[0];
         }
     }
@@ -208,7 +211,7 @@ public class cameraConnectionFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        textureView = (autoFitTextureView) view.findViewById(R.id.texture);
+        textureView = view.findViewById(R.id.texture);
     }
 
     @Override
@@ -264,7 +267,7 @@ public class cameraConnectionFragment extends Fragment {
                 textureView.setAspectRatio(previewSize.getHeight(), previewSize.getWidth());
             }
         } catch (final CameraAccessException e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("CameraAccessException e", "Exception!");
         } catch (final NullPointerException e) {
 
             ErrorDialog.newInstance(getString(R.string.camera_error))
@@ -286,7 +289,7 @@ public class cameraConnectionFragment extends Fragment {
             }
             manager.openCamera(cameraId, stateCallback, backgroundHandler);
         } catch (final CameraAccessException e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("manager.openCamera()", "Exception!");
         } catch (final InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
         }
@@ -328,20 +331,20 @@ public class cameraConnectionFragment extends Fragment {
             backgroundThread = null;
             backgroundHandler = null;
         } catch (final InterruptedException e) {
-            LOGGER.e(e, "Exception!");
+            Log.e(TAG, "Exception!");
         }
     }
 
     private final CameraCaptureSession.CaptureCallback captureCallback = new CameraCaptureSession.CaptureCallback() {
                 @Override
-                public void onCaptureProgressed(final CameraCaptureSession session,
-                                                final CaptureRequest request,
-                                                final CaptureResult partialResult) {}
+                public void onCaptureProgressed(@NonNull final CameraCaptureSession session,
+                                                @NonNull final CaptureRequest request,
+                                                @NonNull final CaptureResult partialResult) {}
 
                 @Override
-                public void onCaptureCompleted(final CameraCaptureSession session,
-                                               final CaptureRequest request,
-                                               final TotalCaptureResult result) {}
+                public void onCaptureCompleted(@NonNull final CameraCaptureSession session,
+                                               @NonNull final CaptureRequest request,
+                                               @NonNull final TotalCaptureResult result) {}
             };
 
     private void createCameraPreviewSession() {
@@ -355,7 +358,8 @@ public class cameraConnectionFragment extends Fragment {
             previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             previewRequestBuilder.addTarget(surface);
 
-            LOGGER.i("Opening camera preview: " + previewSize.getWidth() + "x" + previewSize.getHeight());
+            Log.i("CameraPreviewSession()",
+                    "Opening camera preview: " + previewSize.getWidth() + "x" + previewSize.getHeight());
 
             previewReader = ImageReader.newInstance(previewSize.getWidth(),
                     previewSize.getHeight(),
@@ -389,18 +393,18 @@ public class cameraConnectionFragment extends Fragment {
                                 captureSession.setRepeatingRequest(
                                         previewRequest, captureCallback, backgroundHandler);
                             } catch (final CameraAccessException e) {
-                                LOGGER.e(e, "Exception!");
+                                Log.e("onConfigured", "Exception!");
                             }
                         }
 
                         @Override
-                        public void onConfigureFailed(final CameraCaptureSession cameraCaptureSession) {
+                        public void onConfigureFailed(@NonNull final CameraCaptureSession cameraCaptureSession) {
                             showToast("Failed");
                         }
                     },
                     null);
         } catch (final CameraAccessException e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("onConfiguredFailed()", "Exception!");
         }
     }
 
@@ -409,19 +413,20 @@ public class cameraConnectionFragment extends Fragment {
         if (null == textureView || null == previewSize || null == activity) {
             return;
         }
+
         final int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         final Matrix matrix = new Matrix();
         final RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
         final RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
         final float centerX = viewRect.centerX();
         final float centerY = viewRect.centerY();
+
         if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
-            final float scale =
-                    Math.max(
-                            (float) viewHeight / previewSize.getHeight(),
-                            (float) viewWidth / previewSize.getWidth());
+            final float scale = Math.max((float) viewHeight / previewSize.getHeight(),
+                             (float) viewWidth / previewSize.getWidth());
+
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         } else if (Surface.ROTATION_180 == rotation) {

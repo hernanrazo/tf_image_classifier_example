@@ -19,19 +19,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
+import android.util.Log;
 import android.util.Size;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
 import java.nio.ByteBuffer;
 import hernanrazo.tf_image_classifier_example.env.ImageUtils;
-import hernanrazo.tf_image_classifier_example.env.Logger;
 import hernanrazo.tf_image_classifier_example.R;
 
 public abstract class cameraActivity extends Activity
         implements OnImageAvailableListener, Camera.PreviewCallback {
 
-    private static final Logger LOGGER = new Logger();
     private static final int PERMISSIONS_REQUEST = 1;
     private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
     private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -129,11 +128,11 @@ public abstract class cameraActivity extends Activity
 
                 useCamera2API = isHardwareLevelSupported(characteristics,
                         CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL);
-                LOGGER.i("Camera API lv2?: %s", useCamera2API);
+                Log.i("Camera API lv2?: %s", "Camera API lvl 2 not supported");
                 return cameraId;
             }
         } catch (CameraAccessException e) {
-            LOGGER.e(e, "Not allowed to access camera");
+            Log.e("CameraAccessException e", "Not allowed to access camera");
         }
         return null;
     }
@@ -192,7 +191,7 @@ public abstract class cameraActivity extends Activity
 
             processImage();
         } catch (final Exception e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("processImage()", "Exception!");
             Trace.endSection();
             return;
         }
@@ -208,7 +207,7 @@ public abstract class cameraActivity extends Activity
     @Override
     public void onPreviewFrame(final byte[] bytes, final Camera camera) {
         if (isProcessingFrame) {
-            LOGGER.w("Dropping frame!");
+            Log.w("onPreviewFrame()", "Dropping frame!");
             return;
         }
 
@@ -221,7 +220,7 @@ public abstract class cameraActivity extends Activity
                 onPreviewSizeChosen(new Size(previewSize.width, previewSize.height), 90);
             }
         } catch (final Exception e) {
-            LOGGER.e(e, "Exception!");
+            Log.e("onPreviewFrame()", "Exception!");
             return;
         }
 
@@ -283,7 +282,7 @@ public abstract class cameraActivity extends Activity
         for (int i = 0; i < planes.length; ++i) {
             final ByteBuffer buffer = planes[i].getBuffer();
             if (yuvBytes[i] == null) {
-                LOGGER.d("Initializing buffer %d at size %d", i, buffer.capacity());
+                Log.d("fillBytes()", "Initializing buffer %d at size %d");
                 yuvBytes[i] = new byte[buffer.capacity()];
             }
             buffer.get(yuvBytes[i]);
@@ -295,14 +294,14 @@ public abstract class cameraActivity extends Activity
     }
 
     public void requestRender() {
-        final overLayView overlay = (overLayView) findViewById(R.id.debug_overlay);
+        final overlayView overlay = findViewById(R.id.debug_overlay);
         if (overlay != null) {
             overlay.postInvalidate();
         }
     }
 
-    public void addCallback(final overLayView.DrawCallback callback) {
-        final overLayView overlay = (overLayView) findViewById(R.id.debug_overlay);
+    public void addCallback(final overlayView.DrawCallback callback) {
+        final overlayView overlay = findViewById(R.id.debug_overlay);
         if (overlay != null) {
             overlay.addCallback(callback);
         }
@@ -330,7 +329,6 @@ public abstract class cameraActivity extends Activity
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        LOGGER.d("onCreate " + this);
         super.onCreate(null);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -345,13 +343,13 @@ public abstract class cameraActivity extends Activity
 
     @Override
     public synchronized void onStart() {
-        LOGGER.d("onStart " + this);
+        Log.d("onStart " + this, "OnStart()");
         super.onStart();
     }
 
     @Override
     public synchronized void onResume() {
-        LOGGER.d("onResume " + this);
+        Log.d("onResume " + this, "OnResume()");
         super.onResume();
 
         handlerThread = new HandlerThread("inference");
@@ -361,10 +359,11 @@ public abstract class cameraActivity extends Activity
 
     @Override
     public synchronized void onPause() {
-        LOGGER.d("onPause " + this);
+        Log.d("onPause " + this, "OnPause()");
 
         if (!isFinishing()) {
-            LOGGER.d("Requesting finish");
+            Log.d("onPause " + this, "Requesting finish");
+
             finish();
         }
 
@@ -374,21 +373,22 @@ public abstract class cameraActivity extends Activity
             handlerThread = null;
             handler = null;
         } catch (final InterruptedException e) {
-            LOGGER.e(e, "Exception!");
+            Log.d("onPause handlerThread", "Exception!");
         }
-
         super.onPause();
     }
 
     @Override
     public synchronized void onStop() {
-        LOGGER.d("onStop " + this);
+        Log.d("onStop " + this, "OnStop() ");
+
         super.onStop();
     }
 
     @Override
     public synchronized void onDestroy() {
-        LOGGER.d("onDestroy " + this);
+        Log.d("onDestroy " + this, "OnDestroy() ");
+
         super.onDestroy();
     }
 }
