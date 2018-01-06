@@ -2,6 +2,7 @@ package hernanrazo.tf_image_classifier_example;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -17,6 +18,7 @@ public class recognitionScoreView extends View implements resultsView {
     private final float textSizePx;
     private final Paint fgPaint;
     private final Paint bgPaint;
+    //int myColor = context
 
     public recognitionScoreView(final Context context, final AttributeSet set) {
         super(context, set);
@@ -29,7 +31,7 @@ public class recognitionScoreView extends View implements resultsView {
         fgPaint.setTextSize(textSizePx);
 
         bgPaint = new Paint();
-        bgPaint.setColor(0xcc4285f4);
+        bgPaint.setColor(Color.rgb(51, 255, 94));
     }
 
     @Override
