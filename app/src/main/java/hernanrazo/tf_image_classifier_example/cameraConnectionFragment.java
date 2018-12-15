@@ -48,8 +48,6 @@ import hernanrazo.tf_image_classifier_example.R;
 
 public class cameraConnectionFragment extends Fragment {
 
-
-
     private static final int MINIMUM_PREVIEW_SIZE = 320;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final String FRAGMENT_DIALOG = "dialog";
