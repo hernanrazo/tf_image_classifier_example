@@ -52,9 +52,9 @@ private static final String LABEL_FILE = "file:///android_asset/retrained_labels
 
 Thus, an example would look like this:
 
-![phone](https://github.com/hrazo7/tf_image_classifier_example/blob/master/screenshots/phone.png)
-![pen](https://github.com/hrazo7/tf_image_classifier_example/blob/master/screenshots/pen.png)
-![calculator](https://github.com/hrazo7/tf_image_classifier_example/blob/master/screenshots/calculator.png)
+![phone](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/phone.png)
+![pen](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/pen.png)
+![calculator](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/calculator.png)
 
 Sources and Helpful Links
 ---
