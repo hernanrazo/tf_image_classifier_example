@@ -143,7 +143,6 @@ public class tensorFlowImageClassifier implements classifier {
         return inferenceInterface.getStatString();
     }
 
-    @Override
     public void close() {
         inferenceInterface.close();
     }
