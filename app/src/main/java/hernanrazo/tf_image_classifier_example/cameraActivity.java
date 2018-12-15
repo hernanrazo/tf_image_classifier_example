@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import java.nio.ByteBuffer;
 import hernanrazo.tf_image_classifier_example.env.ImageUtils;
-import hernanrazo.tf_image_classifier_example.R;
 
 public abstract class cameraActivity extends Activity
         implements OnImageAvailableListener, Camera.PreviewCallback {
@@ -47,12 +46,6 @@ public abstract class cameraActivity extends Activity
     private Runnable postInferenceCallback;
     private Runnable imageConverter;
     private byte[] lastPreviewFrame;
-    protected int getLuminanceStride() {
-        return yRowStride;
-    }
-    protected byte[] getLuminance() {
-        return yuvBytes[0];
-    }
 
     protected abstract void processImage();
     protected abstract void onPreviewSizeChosen(final Size size, final int rotation);
@@ -325,7 +318,6 @@ public abstract class cameraActivity extends Activity
             postInferenceCallback.run();
         }
     }
-    //==================================================================
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

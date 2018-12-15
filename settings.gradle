@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':tf_image_classifier'
+include ':tf_image_classifier_example'

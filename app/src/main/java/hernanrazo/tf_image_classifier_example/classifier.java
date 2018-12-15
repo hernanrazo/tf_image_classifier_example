@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface classifier {
 
-    public class Recognition {
+    class Recognition {
 
         private final String id;
         private final String title;
@@ -68,5 +68,4 @@ public interface classifier {
     List<Recognition> recognizeImage(Bitmap bitmap);
     void enableStatLogging(final boolean debug);
     String getStatString();
-    void close();
 }
