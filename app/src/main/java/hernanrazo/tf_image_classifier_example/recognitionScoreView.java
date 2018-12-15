@@ -18,6 +18,7 @@ public class recognitionScoreView extends View implements resultsView {
     private final float textSizePx;
     private final Paint fgPaint;
     private final Paint bgPaint;
+    //int myColor = context
 
     public recognitionScoreView(final Context context, final AttributeSet set) {
         super(context, set);
