@@ -52,9 +52,11 @@ private static final String LABEL_FILE = "file:///android_asset/retrained_labels
 
 Thus, an example would look like this:
 
-![phone](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/phone.png)
-![pen](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/pen.png)
-![calculator](https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/calculator.png)
+<img src="https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/phone.png" width="400" height="650" title="phone">   
+
+<img src="https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/pen.png" width="400" height="650" title="pen">
+
+<img src="https://github.com/hrazo7/tf_image_classifier_example/blob/master/other/screenshots/calculator.png" width="400" height="650" title="calculator">
 
 Sources and Helpful Links
 ---
@@ -62,5 +64,3 @@ Sources and Helpful Links
 http://nilhcem.com/android/custom-tensorflow-classifier
 https://www.youtube.com/watch?v=QfNvhPx5Px8
 https://github.com/google/inception
-
-
