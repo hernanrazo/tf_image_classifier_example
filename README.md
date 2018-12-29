@@ -1,7 +1,7 @@
 Tensorflow Image Classifier
 ===
 
-This project is an image classifier Android app that uses TensorFlow to distinguish between pens, calculators, and phones. This project uses a convolutional neural network, specifically, the Google Inception model. Check out [my post on Medium] for additional inofrmation that may not be stated here(https://medium.com/@hernanrazo/tensorflow-image-classifier-on-android-bcc818e9f982) 
+This project is an image classifier Android app that uses TensorFlow to distinguish between pens, calculators, and phones. This project uses a convolutional neural network, specifically, the Google Inception model. Check out [my post on Medium](https://medium.com/@hernanrazo/tensorflow-image-classifier-on-android-bcc818e9f982) for additional inofrmation that may not be stated here  
 
 To train this model to recognize pens, calculators, and phones, you can use a method called transfer learning. The original inception model already has layers that do most of the heavy work, To make a custom classifier, you only have to change the last few to get good results.   
 
