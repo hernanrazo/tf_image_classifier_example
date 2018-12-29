@@ -1,13 +1,13 @@
 Tensorflow Image Classifier
 ===
 
-This project is an image classifier Android app that uses TensorFlow to distinguish between pens, calculators, and phones. This project uses a convolutional neural network, specifically, the Google Inception model.  
+This project is an image classifier Android app that uses TensorFlow to distinguish between pens, calculators, and phones. This project uses a convolutional neural network, specifically, the Google Inception model. Check out my [post on Medium for additional inofrmation that may not be stated here](https://medium.com/@hernanrazo/tensorflow-image-classifier-on-android-bcc818e9f982) 
 
 To train this model to recognize pens, calculators, and phones, you can use a method called transfer learning. The original inception model already has layers that do most of the heavy work, To make a custom classifier, you only have to change the last few to get good results.   
 
-To do this, first download a large amount of images for whatever object you want to detect. Use your preferred Chrome extension to bulk download any images off a Google Images search or other webpages. After that, place all the images in a folder and name that folder properly with the object that the images represent. This is important since the finished product will use these labels to display results. You can do this for multiple objects if you want to classify more than one thing.  
+To do this, first download a large amount of images for whatever object you want to detect. Use your preferred Chrome extension to bulk download any images off of a Google Images search or other webpages. After that, place all the images in a folder and name that folder properly with the object that the images represent. This is important since the finished product will use these labels to display results. You can do this for multiple objects if you want to classify more than one thing.  
 
-To actually retrian the model, open a Docker container and place a TensorFlow image into it. After that, pull the code from the TensorFlow directory. This code will train the model to recoginze the images you feed it. Depending on the number of images and what computer you are using, this may take a while. The better the resulting accuracy, the better the model will be.  
+To actually retrain the model, open a Docker container and place a TensorFlow image into it. After that, pull the code from the TensorFlow directory. This code will train the model to recognize the images you feed it.  
 
 Finally, classify each image by using the following code:  
 
@@ -38,8 +38,9 @@ with tf.Session() as sess:
         score = predictions[0][node_id]
         print('%s (score = %.5f)' % (human_string, score))
 
-
 ```
+
+Depending on the number of images and what computer you are using, this may take a while. The better the resulting accuracy, the better the model will be.  
 
 In Android Studio, I placed the following code in the `classifierActivity.java` file to connect the new model to the app:  
 
@@ -61,6 +62,6 @@ Thus, an example would look like this:
 Sources and Helpful Links
 ---
 
-http://nilhcem.com/android/custom-tensorflow-classifier
-https://www.youtube.com/watch?v=QfNvhPx5Px8
+http://nilhcem.com/android/custom-tensorflow-classifier  
+https://www.youtube.com/watch?v=QfN
 https://github.com/google/inception
